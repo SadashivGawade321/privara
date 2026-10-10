@@ -9,10 +9,10 @@ import copy
 import torch
 import torch.nn as nn
 from torch.utils.data import Dataset
-from src.privacy.dp_training import train_local_model
-from src.models.classifier import compute_model_delta
-from src.compression.topk import TopKCompressor
-from src.communication.serializer import PayloadSerializer
+from privacy.dp_training import train_local_model
+from models.classifier import compute_model_delta
+from compression.topk import TopKCompressor
+from communication.serializer import PayloadSerializer
 
 
 class FederatedClient:

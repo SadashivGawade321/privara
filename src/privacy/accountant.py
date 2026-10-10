@@ -7,7 +7,7 @@ differential privacy bounds (epsilon, delta) based on real DP-SGD sampling and n
 from typing import Dict, Any, List, Optional
 import math
 from opacus.accountants import RDPAccountant, PRVAccountant
-from src.utils.logging import log_event, logger
+from utils.logging import log_event, logger
 
 
 class PrivacyAccountantWrapper:

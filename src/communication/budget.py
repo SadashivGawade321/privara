@@ -5,7 +5,7 @@ for upload or bidirectional federated communication traffic.
 """
 
 from typing import Dict, Any, List, Tuple
-from src.utils.logging import log_event, logger
+from utils.logging import log_event, logger
 
 
 class CommunicationBudgetManager:

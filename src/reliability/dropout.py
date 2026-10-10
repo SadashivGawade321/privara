@@ -6,7 +6,7 @@ implementing a minimum-participant safeguard policy.
 
 from typing import List, Tuple, Dict
 import numpy as np
-from src.utils.logging import log_event
+from utils.logging import log_event
 
 
 class DropoutSimulator:

@@ -12,16 +12,16 @@ import torch
 import torch.nn as nn
 from torch.utils.data import Dataset
 
-from src.models.classifier import get_model
-from src.federated.client import FederatedClient
-from src.federated.server import FederatedServer
-from src.data.partitioner import DataPartitioner
-from src.privacy.accountant import PrivacyAccountantWrapper
-from src.communication.budget import CommunicationBudgetManager
-from src.communication.metrics import CommunicationMetricsTracker
-from src.reliability.dropout import DropoutSimulator
-from src.reliability.stragglers import StragglerSimulator
-from src.utils.logging import log_event, logger
+from models.classifier import get_model
+from federated.client import FederatedClient
+from federated.server import FederatedServer
+from data.partitioner import DataPartitioner
+from privacy.accountant import PrivacyAccountantWrapper
+from communication.budget import CommunicationBudgetManager
+from communication.metrics import CommunicationMetricsTracker
+from reliability.dropout import DropoutSimulator
+from reliability.stragglers import StragglerSimulator
+from utils.logging import log_event, logger
 
 
 class FederatedSimulator:

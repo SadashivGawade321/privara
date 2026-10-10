@@ -10,8 +10,8 @@ import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader, Dataset
 from opacus import PrivacyEngine
-from src.privacy.accountant import PrivacyAccountantWrapper
-from src.utils.logging import logger
+from privacy.accountant import PrivacyAccountantWrapper
+from utils.logging import logger
 
 
 def train_local_model(

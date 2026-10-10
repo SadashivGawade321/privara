@@ -7,14 +7,14 @@ Entry point: streamlit run app.py
 import sys
 import os
 
-# ── Definitive sys.path fix for Streamlit Cloud ─────────────────────────────
-# Streamlit Cloud pre-inserts /mount/src into sys.path.
-# This makes Python resolve `src.data` → /mount/src/src/data/ (wrong!).
-# Fix: remove /mount/src, then insert the actual repo root FIRST.
-_HERE = os.path.dirname(os.path.abspath(__file__))  # /mount/src/privara
-sys.path = [p for p in sys.path if p not in ("/mount/src", "/mount/src/")]
-for _p in (_HERE, os.getcwd()):
-    if _p and _p not in sys.path:
+# ── Streamlit Cloud import fix ───────────────────────────────────────────────
+# Add the src/ directory itself to sys.path so imports work as
+# `from data.xxx import` / `from federated.xxx import` etc.
+# This bypasses ALL Streamlit Cloud sys.path conflicts permanently.
+_HERE = os.path.dirname(os.path.abspath(__file__))
+_SRC = os.path.join(_HERE, "src")
+for _p in (_SRC, _HERE):
+    if _p not in sys.path:
         sys.path.insert(0, _p)
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -49,14 +49,14 @@ def get_hardware_info() -> tuple[str, str]:
         return "cuda", f"🟢 GPU Active: {name}"
     return "cpu", "⚡ CPU Turbo: Multi-Core Optimized"
 
-from src.data.dataset_loader import SyntheticDataset, load_dataset
-from src.federated.simulator import FederatedSimulator
-from src.evaluation.experiments import ExperimentRunner
-from src.evaluation.mia import MembershipInferenceEvaluator
-from src.models.classifier import get_model
-from src.utils.logging import EventTracker, log_event
-from src.utils.reproducibility import set_seed
-from src.visualization.charts import (
+from data.dataset_loader import SyntheticDataset, load_dataset
+from federated.simulator import FederatedSimulator
+from evaluation.experiments import ExperimentRunner
+from evaluation.mia import MembershipInferenceEvaluator
+from models.classifier import get_model
+from utils.logging import EventTracker, log_event
+from utils.reproducibility import set_seed
+from visualization.charts import (
     plot_accuracy_curves,
     plot_privacy_utility_tradeoff,
     plot_communication_bytes_per_round,

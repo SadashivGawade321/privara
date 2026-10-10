@@ -10,12 +10,12 @@ import time
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader, Dataset
-from src.federated.aggregation import aggregate_updates_fedavg
-from src.communication.serializer import PayloadSerializer
-from src.communication.budget import CommunicationBudgetManager
-from src.communication.metrics import CommunicationMetricsTracker
-from src.privacy.accountant import PrivacyAccountantWrapper
-from src.utils.logging import log_event, logger
+from federated.aggregation import aggregate_updates_fedavg
+from communication.serializer import PayloadSerializer
+from communication.budget import CommunicationBudgetManager
+from communication.metrics import CommunicationMetricsTracker
+from privacy.accountant import PrivacyAccountantWrapper
+from utils.logging import log_event, logger
 
 
 class FederatedServer:

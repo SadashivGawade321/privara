@@ -6,7 +6,7 @@ Simulates delayed client responses deterministically for federated robustness ev
 from typing import List, Tuple, Dict
 import time
 import numpy as np
-from src.utils.logging import log_event
+from utils.logging import log_event
 
 
 class StragglerSimulator:

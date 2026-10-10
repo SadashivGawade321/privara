@@ -7,9 +7,9 @@ sparse update reconstruction, and strict validation of accepted updates.
 from typing import List, Dict, Any, Tuple
 import torch
 import torch.nn as nn
-from src.compression.topk import TopKCompressor
-from src.models.classifier import apply_model_delta
-from src.utils.logging import log_event
+from compression.topk import TopKCompressor
+from models.classifier import apply_model_delta
+from utils.logging import log_event
 
 
 def aggregate_updates_fedavg(

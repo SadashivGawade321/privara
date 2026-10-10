@@ -14,10 +14,10 @@ from typing import Dict, Any, List, Optional
 import pandas as pd
 from datetime import datetime
 
-from src.data.dataset_loader import load_dataset
-from src.federated.simulator import FederatedSimulator
-from src.evaluation.mia import MembershipInferenceEvaluator
-from src.utils.logging import log_event, logger
+from data.dataset_loader import load_dataset
+from federated.simulator import FederatedSimulator
+from evaluation.mia import MembershipInferenceEvaluator
+from utils.logging import log_event, logger
 
 
 class ExperimentRunner:
