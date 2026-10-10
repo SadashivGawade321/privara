@@ -1,0 +1,68 @@
+# Privara - Default Configuration
+# Privacy-Preserving Federated Learning with Differential Privacy for Non-IID Clients
+
+dataset:
+  name: "Synthetic"          # "Synthetic", "MNIST", or "FashionMNIST"
+  data_dir: "./data"
+  download: true
+  num_classes: 10
+  image_channels: 1
+  image_size: 28
+
+partitioning:
+  num_clients: 5
+  strategy: "dirichlet"       # "iid", "dirichlet", "label_skew"
+  dirichlet_alpha: 0.5        # Lower = higher heterogeneity / non-IID skew
+  classes_per_client: 3       # Used if strategy == "label_skew"
+  min_samples_per_client: 20
+  seed: 42
+
+model:
+  architecture: "cnn"         # "cnn" (Opacus-compatible DP-CNN) or "mlp"
+  hidden_dim: 128
+  num_classes: 10
+
+federated:
+  num_rounds: 3
+  client_fraction: 1.0        # Fraction of clients selected each round (1.0 = all available)
+  local_epochs: 1
+  batch_size: 32
+  learning_rate: 0.01
+  momentum: 0.9
+  weight_decay: 1e-4
+  aggregation: "fedavg"       # "fedavg"
+  min_participants: 2
+
+privacy:
+  enabled: true
+  noise_multiplier: 1.0       # sigma: Gaussian noise scale (calibrated to clip norm)
+  max_grad_norm: 1.2          # C: L2 gradient clipping threshold
+  target_delta: 0.00001       # delta: 1e-5
+  accountant: "rdp"           # "rdp" or "prv"
+  target_epsilon: 3.0         # Target eps budget limit
+  secure_rng: false           # Standard PyTorch RNG for deterministic simulation
+
+compression:
+  enabled: true
+  method: "topk"              # "topk"
+  topk_ratio: 0.5             # Retain top 50% magnitude elements (sparse)
+  measure_bytes: true         # Measure actual serialized payload bytes
+
+communication:
+  budget_per_round_mb: 20.0   # Per-round budget limit in MB
+  budget_mode: "bidirectional"# "bidirectional" or "upload"
+  enforce_policy: "reject"    # "reject", "throttle", or "warn"
+
+reliability:
+  dropout_prob: 0.1           # Probability of client dropping out (failure)
+  straggler_prob: 0.1         # Probability of client being delayed/straggler
+  simulated_delay_sec: 0.0    # Emulated delay (0.0 for fast hackathon demo)
+
+evaluation:
+  test_batch_size: 64
+  evaluate_every_round: true
+  membership_inference: false # MIA stretch goal evaluation
+
+reproducibility:
+  seed: 42
+  deterministic: true
