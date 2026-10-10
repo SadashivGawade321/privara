@@ -71,13 +71,16 @@ def train_local_model(
     if dp_enabled and noise_multiplier > 0:
         try:
             privacy_engine = PrivacyEngine(secure_mode=False)
-            local_model, optimizer, data_loader = privacy_engine.make_private(
+            _private = privacy_engine.make_private(
                 module=local_model,
                 optimizer=optimizer,
                 data_loader=data_loader,
                 noise_multiplier=noise_multiplier,
                 max_grad_norm=max_grad_norm,
             )
+            # make_private returns (model, optimizer, dataloader) or
+            # (model, optimizer, loss_fn, dataloader) in fast-clipping mode.
+            local_model, optimizer, data_loader = _private[0], _private[1], _private[-1]  # type: ignore[assignment]
             applied_dp = True
         except Exception as e:
             logger.warning(f"Opacus make_private failed ({e}). Proceeding with manual DP-SGD clipping.")
