@@ -7,14 +7,18 @@ Entry point: streamlit run app.py
 import sys
 import os
 
-# Ensure repository root is in sys.path for Streamlit Cloud & container deployment
-ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-if ROOT_DIR not in sys.path:
-    sys.path.insert(0, ROOT_DIR)
-
-CWD = os.getcwd()
-if CWD not in sys.path:
-    sys.path.insert(0, CWD)
+# ── Bulletproof sys.path for Streamlit Cloud (/mount/src/privara) ──────────
+_HERE = os.path.dirname(os.path.abspath(__file__))   # e.g. /mount/src/privara
+_CANDIDATES = [
+    _HERE,                                             # repo root itself
+    os.getcwd(),                                       # working directory
+    "/mount/src/privara",                              # Streamlit Cloud explicit path
+    os.path.join("/mount/src", os.path.basename(_HERE)),  # fallback variant
+]
+for _p in _CANDIDATES:
+    if _p and _p not in sys.path:
+        sys.path.insert(0, _p)
+# ────────────────────────────────────────────────────────────────────────────
 
 import copy
 import json
