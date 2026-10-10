@@ -8,17 +8,15 @@ import sys
 import os
 
 # ── Streamlit Cloud import fix ───────────────────────────────────────────────
-# Add src/ to sys.path so that internal cross-imports within src/ subpackages
-# (e.g. `from utils.logging import ...` inside src/federated/server.py) still
-# resolve correctly.  app.py itself uses the fully-qualified `src.` prefix to
-# avoid the root data/ directory shadowing src/data/ on Python 3.14+.
+# On Streamlit Cloud, `privara` is installed via pyproject.toml which maps
+# `where = ["src"]`, so subpackages (data, federated, models, etc.) are
+# installed as top-level bare names into site-packages.
+# The sys.path insert below is a local-dev fallback so bare imports also work
+# when running `streamlit run app.py` directly without `pip install -e .`.
 _HERE = os.path.dirname(os.path.abspath(__file__))
 _SRC = os.path.join(_HERE, "src")
 if _SRC not in sys.path:
     sys.path.insert(0, _SRC)
-# Ensure the repo root is also on sys.path so `import src` works everywhere.
-if _HERE not in sys.path:
-    sys.path.insert(0, _HERE)
 # ─────────────────────────────────────────────────────────────────────────────
 
 
@@ -52,14 +50,14 @@ def get_hardware_info() -> tuple[str, str]:
         return "cuda", f"🟢 GPU Active: {name}"
     return "cpu", "⚡ CPU Turbo: Multi-Core Optimized"
 
-from src.data.dataset_loader import SyntheticDataset, load_dataset
-from src.federated.simulator import FederatedSimulator
-from src.evaluation.experiments import ExperimentRunner
-from src.evaluation.mia import MembershipInferenceEvaluator
-from src.models.classifier import get_model
-from src.utils.logging import EventTracker, log_event
-from src.utils.reproducibility import set_seed
-from src.visualization.charts import (
+from data.dataset_loader import SyntheticDataset, load_dataset
+from federated.simulator import FederatedSimulator
+from evaluation.experiments import ExperimentRunner
+from evaluation.mia import MembershipInferenceEvaluator
+from models.classifier import get_model
+from utils.logging import EventTracker, log_event
+from utils.reproducibility import set_seed
+from visualization.charts import (
     plot_accuracy_curves,
     plot_privacy_utility_tradeoff,
     plot_communication_bytes_per_round,
