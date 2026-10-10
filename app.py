@@ -8,14 +8,13 @@ import sys
 import os
 
 # ── Streamlit Cloud import fix ───────────────────────────────────────────────
-# Add the src/ directory itself to sys.path so imports work as
-# `from data.xxx import` / `from federated.xxx import` etc.
-# This bypasses ALL Streamlit Cloud sys.path conflicts permanently.
+# Insert src/ at position 0 so it is searched BEFORE the repo root.
+# The repo root has a /data/ folder (raw MNIST files) with no __init__.py,
+# which shadows src/data/ if the root is first on sys.path.
 _HERE = os.path.dirname(os.path.abspath(__file__))
 _SRC = os.path.join(_HERE, "src")
-for _p in (_SRC, _HERE):
-    if _p not in sys.path:
-        sys.path.insert(0, _p)
+if _SRC not in sys.path:
+    sys.path.insert(0, _SRC)
 # ─────────────────────────────────────────────────────────────────────────────
 
 
