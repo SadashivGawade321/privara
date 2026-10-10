@@ -4,5 +4,6 @@ setup(
     name="privara",
     version="1.0.0",
     description="Privara: Privacy-Preserving Federated Learning Simulator",
-    packages=find_packages(),
+    package_dir={"": "src"},
+    packages=find_packages(where="src"),
 )

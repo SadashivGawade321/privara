@@ -9,5 +9,4 @@ description = "Privara: Privacy-Preserving Federated Learning Simulator"
 requires-python = ">=3.9"
 
 [tool.setuptools.packages.find]
-where = ["."]
-include = ["src*"]
+where = ["src"]
