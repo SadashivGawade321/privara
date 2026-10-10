@@ -7,18 +7,17 @@ Entry point: streamlit run app.py
 import sys
 import os
 
-# ── Bulletproof sys.path for Streamlit Cloud (/mount/src/privara) ──────────
-_HERE = os.path.dirname(os.path.abspath(__file__))   # e.g. /mount/src/privara
-_CANDIDATES = [
-    _HERE,                                             # repo root itself
-    os.getcwd(),                                       # working directory
-    "/mount/src/privara",                              # Streamlit Cloud explicit path
-    os.path.join("/mount/src", os.path.basename(_HERE)),  # fallback variant
-]
-for _p in _CANDIDATES:
+# ── Definitive sys.path fix for Streamlit Cloud ─────────────────────────────
+# Streamlit Cloud pre-inserts /mount/src into sys.path.
+# This makes Python resolve `src.data` → /mount/src/src/data/ (wrong!).
+# Fix: remove /mount/src, then insert the actual repo root FIRST.
+_HERE = os.path.dirname(os.path.abspath(__file__))  # /mount/src/privara
+sys.path = [p for p in sys.path if p not in ("/mount/src", "/mount/src/")]
+for _p in (_HERE, os.getcwd()):
     if _p and _p not in sys.path:
         sys.path.insert(0, _p)
-# ────────────────────────────────────────────────────────────────────────────
+# ─────────────────────────────────────────────────────────────────────────────
+
 
 import copy
 import json
