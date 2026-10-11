@@ -8,15 +8,25 @@ import sys
 import os
 
 # ── Streamlit Cloud import fix ───────────────────────────────────────────────
-# On Streamlit Cloud, `privara` is installed via pyproject.toml which maps
-# `where = ["src"]`, so subpackages (data, federated, models, etc.) are
-# installed as top-level bare names into site-packages.
-# The sys.path insert below is a local-dev fallback so bare imports also work
-# when running `streamlit run app.py` directly without `pip install -e .`.
 _HERE = os.path.dirname(os.path.abspath(__file__))
 _SRC = os.path.join(_HERE, "src")
 if _SRC not in sys.path:
     sys.path.insert(0, _SRC)
+
+# Explicitly bind local 'compression' to prevent collisions with Python 3.14+ stdlib
+import importlib.util
+_comp_dir = os.path.join(_SRC, "compression")
+_comp_init = os.path.join(_comp_dir, "__init__.py")
+if os.path.exists(_comp_init) and ("compression" not in sys.modules or not getattr(sys.modules["compression"], "__file__", "").startswith(_SRC)):
+    _spec = importlib.util.spec_from_file_location(
+        "compression",
+        _comp_init,
+        submodule_search_locations=[_comp_dir]
+    )
+    if _spec and _spec.loader:
+        _mod = importlib.util.module_from_spec(_spec)
+        sys.modules["compression"] = _mod
+        _spec.loader.exec_module(_mod)
 # ─────────────────────────────────────────────────────────────────────────────
 
 

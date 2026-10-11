@@ -26,6 +26,8 @@ ENV/
 env/
 env.bak/
 venv.bak/
+.env
+!.env.example
 
 # Streamlit
 .streamlit/secrets.toml
